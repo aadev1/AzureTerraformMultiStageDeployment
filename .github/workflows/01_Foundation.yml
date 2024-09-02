@@ -77,39 +77,39 @@ jobs:
       arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID_UAT }}
       arm_tenant_id: ${{ secrets.ARM_TENANT_ID_UAT }}
 
-  # Plan_Prod:
-  #   permissions:   #Permission is required if enabling TFSEC == true
-  #     actions: read
-  #     contents: read
-  #     security-events: write
-  #   uses: ./.github/workflows/az_tf_plan.yml
-  #   with:
-  #     path: 01_Foundation
-  #     tf_version: latest
-  #     az_resource_group: Terraform-GitHub-Backend
-  #     az_storage_acc: tfgithubbackendsa
-  #     az_container_name: gh-terraform-deployments
-  #     tf_key: foundation-prod
-  #     tf_vars_file: config-prod.tfvars
-  #     enable_TFSEC: true                          
-  #   secrets:
-  #     arm_client_id: ${{ secrets.ARM_CLIENT_ID }}
-  #     arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-  #     arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  #     arm_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+  Plan_Prod:
+    permissions:   #Permission is required if enabling TFSEC == true
+      actions: read
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/az_tf_plan.yml
+    with:
+      path: 01_Foundation
+      tf_version: latest
+      az_resource_group: Demo-Terraform-Core-Backend-RG
+      az_storage_acc: tfcorebackendsa4118
+      az_container_name: tfstate
+      tf_key: foundation-prod
+      tf_vars_file: config-prod.tfvars
+      enable_TFSEC: true                          
+    secrets:
+      arm_client_id: ${{ secrets.ARM_CLIENT_ID_PRD }}
+      arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET_PRD }}
+      arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID_PRD }}
+      arm_tenant_id: ${{ secrets.ARM_TENANT_ID_PRD }}
 
-  # Deploy_Prod:
-  #   needs: [Plan_Prod, Deploy_Uat]
-  #   uses: ./.github/workflows/az_tf_apply.yml
-  #   with:
-  #     path: 01_Foundation
-  #     az_resource_group: Terraform-GitHub-Backend
-  #     az_storage_acc: tfgithubbackendsa
-  #     az_container_name: gh-terraform-deployments
-  #     tf_key: foundation-prod
-  #     gh_environment: Production
-  #   secrets:
-  #     arm_client_id: ${{ secrets.ARM_CLIENT_ID }}
-  #     arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-  #     arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  #     arm_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+  Deploy_Prod:
+    needs: [Plan_Prod, Deploy_Uat]
+    uses: ./.github/workflows/az_tf_apply.yml
+    with:
+      path: 01_Foundation
+      az_resource_group: Demo-Terraform-Core-Backend-RG
+      az_storage_acc: tfcorebackendsa4118
+      az_container_name: tfstate
+      tf_key: foundation-prod
+      gh_environment: Production
+    secrets:
+      arm_client_id: ${{ secrets.ARM_CLIENT_ID_PRD }}
+      arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET_PRD }}
+      arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID_PRD }}
+      arm_tenant_id: ${{ secrets.ARM_TENANT_ID_PRD }}
